@@ -11,16 +11,14 @@ git clone https://github.com/username/reon-dashboard.git
 cd reon-dashboard
 ```
 ## 2. Install dependencies
-npm install
-# or
-yarn install
+npm install or yarn install
 
 ## 3 Set environment variables
 VITE_API_BASE_URL = "http://localhost:5173/"
 
 ## 4 NOW Run the development server
-npm run dev
-# or
+npm run dev 
+or
 yarn dev
 
 
