@@ -1,8 +1,8 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { Form, Input, InputNumber, Popconfirm, Table, Space, Typography, Spin, type TableProps } from 'antd';
+import { type Site, type RootState, type EditableCellProps } from '../../utils/type';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateSiteRequest } from '../../redux/actions/siteAction';
-import { type Site, type RootState, type EditableCellProps } from '../../utils/type';
 import ModalComponent from '../ui/Modal';
 import { showModal } from '../../redux/actions/modalAction';
 const SiteInsightChart = lazy(() => import('./SiteInsightChart'));
@@ -42,8 +42,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
 
 const DashboardTable = () => {
   const [form] = Form.useForm();
-  const storedData = useSelector((state: RootState) => state.sites?.data);
-  const loading = useSelector((state: RootState) => state.sites?.loading);
+  const { data: storedData, loading } = useSelector((state: RootState) => state.sites);
   const [selectedSite, setSelectedSite] = useState<null | typeof storedData[0]>(null);
   const dispatch = useDispatch()
   const [data, setData] = useState<Site[] | undefined>(storedData);
@@ -174,9 +173,10 @@ const DashboardTable = () => {
               columns={mergedColumns}
               rowClassName="editable-row"
               dataSource={data}
-              components={{
-                body: { cell: EditableCell },
-              }}
+              scroll={{ x: 'max-content' }}
+            components={{
+              body: { cell: EditableCell },
+            }}
             />
           </Form>
         )

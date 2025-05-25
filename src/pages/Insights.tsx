@@ -11,7 +11,7 @@ const InsightsPage = () => {
             Insights
           </h1>
         </div>
-        <div className="multisite-insight-wrapper">
+        <div className="multisite-insight-wrapper mt-4">
           <Suspense fallback={<Spin />}>
             <MultiSiteInsight />
           </Suspense>

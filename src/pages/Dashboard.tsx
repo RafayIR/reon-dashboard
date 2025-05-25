@@ -67,7 +67,6 @@ const DashboardPage = () => {
           {settings?.showDataTable && <DashboardTable />}
         </Suspense>
       </div>
-
     </>
   )
 }

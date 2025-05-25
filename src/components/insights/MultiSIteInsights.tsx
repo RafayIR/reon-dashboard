@@ -13,19 +13,30 @@ interface SiteInsight {
 const MultiSiteInsight = () => {
   const dispatch = useDispatch();
   const sites: SiteInsight[] = useSelector((state: any) => state.insights.sites);
+  const heatmapData: [number, number, number][] = [];
+  const siteNames: string[] = sites.map(site => site.siteName);
+  const isMobile = window.innerWidth < 768;
+
 
   useEffect(() => {
     dispatch(loadSiteInsights());
   }, [dispatch]);
 
-  if (!sites.length) return <p>Loading...</p>;
-
 
   const lineChartOption = {
     title: { text: 'Site Trends Comparison' },
     tooltip: { trigger: 'axis' },
-    grid: { height: '60%', top: '20%' },
-    legend: { data: sites.map(s => s.siteName) },
+    grid: {
+      right: isMobile ? '5%' : '20%',
+      top: isMobile ? 50 : 60,
+    },
+    legend: {
+      data: sites.map(s => s.siteName),
+      type: 'scroll',
+      // orient: isMobile ? 'horizontal' : 'vertical',
+      top: isMobile ? 'bottom' :'',
+      left: isMobile ? 'center' : 'center',
+    },
     xAxis: { type: 'category', data: ['T1', 'T2', 'T3', 'T4', 'T5'] },
     yAxis: { type: 'value' },
     series: sites.map(site => ({
@@ -35,8 +46,7 @@ const MultiSiteInsight = () => {
     })),
   };
 
-  const heatmapData: [number, number, number][] = [];
-  const siteNames: string[] = sites.map(site => site.siteName);
+
 
   sites.forEach((site, siteIndex) => {
     const row: number[] = new Array(3).fill(0);
@@ -84,12 +94,10 @@ const MultiSiteInsight = () => {
     ],
   };
   return (
-    <>
-      <div style={{ padding: 20 }}>
-        <ReactECharts option={lineChartOption} style={{ height: 400 }} />
-        <ReactECharts option={heatmapOption} style={{ height: 400, marginTop: 40 }} />
-      </div>
-    </>
+    <div className='md:p-5'>
+      <ReactECharts option={lineChartOption} style={{ height: 400 }} />
+      <ReactECharts option={heatmapOption} style={{ height: 400, marginTop: 40 }} />
+    </div>
   )
 }
 

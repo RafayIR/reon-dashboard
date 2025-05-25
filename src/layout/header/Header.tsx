@@ -34,21 +34,23 @@ const Header: React.FC = () => {
   return (
     <header>
       <div className="header-wrapper bg-[#FFC601] py-3">
-        <div className="flex items-center">
-          <NavLink to='/dashboard' className='logo-wrapper'>
-            <div className='logo w-[70%] px-4'>
-              <img src="assets/images/logo/reon-logo.png" alt="logo" />
-            </div>
-          </NavLink>
+        <div className="container">
+          <div className="flex items-center">
+            <NavLink to='/dashboard' className='logo-wrapper'>
+              <div className='logo w-[70%] px-4'>
+                <img src="assets/images/logo/reon-logo.png" alt="logo" />
+              </div>
+            </NavLink>
 
-          <Menu
-            theme="light"
-            mode="horizontal"
-            selectedKeys={selectedKeys}
-            items={menuItems}
-            className="border-0"
-            style={{ flex: 1, minWidth: 0, borderBottom: 0 }}
-          />
+            <Menu
+              theme="light"
+              mode="horizontal"
+              selectedKeys={selectedKeys}
+              items={menuItems}
+              className="border-0 md:justify-start justify-end"
+              style={{ flex: 1, minWidth: 0, borderBottom: 0 }}
+            />
+          </div>
         </div>
       </div>
     </header>

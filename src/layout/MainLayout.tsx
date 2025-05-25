@@ -1,6 +1,7 @@
 import React, { type ReactNode } from 'react';
 import { Layout, theme } from 'antd';
 import Header from './header/Header';
+import Footer from './footer/Footer';
 const { Content } = Layout;
 
 interface MainLayoutProps {
@@ -14,17 +15,19 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 
   return (
     <Layout className='min-h-screen'>
-        <Header />
-        <Content
-          style={{
-            margin: '24px 16px',
-            padding: 24,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        >
+      <Header />
+      <Content className='md:px-4 md:py-6'
+        style={{
+          padding: 24,
+          background: colorBgContainer,
+          borderRadius: borderRadiusLG,
+        }}
+      >
+        <div className='container'>
           {children}
-        </Content>
+        </div>
+      </Content>
+      <Footer />
     </Layout>
   );
 };

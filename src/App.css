@@ -17,3 +17,7 @@
   font-size: 34px;
   font-weight: 600;
 }
+
+.ant-menu-horizontal>.ant-menu-item-selected::after {
+  border-bottom: none !important;
+}
