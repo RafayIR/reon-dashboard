@@ -1,5 +1,5 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
-import { Form, Input, InputNumber, Popconfirm, Table, Space, Typography, Spin, type TableProps } from 'antd';
+import { useState, useEffect, lazy, Suspense, useRef } from 'react';
+import { Form, Input, InputNumber, Popconfirm, Table, Space, Typography, Spin, type TableProps, message } from 'antd';
 import { type Site, type RootState, type EditableCellProps } from '../../utils/type';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateSiteRequest } from '../../redux/actions/siteAction';
@@ -47,10 +47,25 @@ const DashboardTable = () => {
   const dispatch = useDispatch()
   const [data, setData] = useState<Site[] | undefined>(storedData);
   const [editingKey, setEditingKey] = useState('');
+  const previousLoading = useRef(loading);
+  const [messageApi, contextHolder] = message.useMessage();
+
 
   useEffect(() => {
     setData(storedData);
-  }, [storedData]);
+    if (previousLoading.current && !loading) {
+      success()
+    }
+    previousLoading.current = loading;
+
+  }, [storedData, loading]);
+
+  const success = () => {
+    messageApi.open({
+      type: 'success',
+      content: 'Record Updated successfully',
+    });
+  };
 
   const isEditing = (record: Site) => record.id === Number(editingKey);
   const edit = (record: Partial<Site>) => {
@@ -165,6 +180,7 @@ const DashboardTable = () => {
 
   return (
     <div className='table-wrapper mt-16 shadow-md'>
+      {contextHolder}
       {
         storedData && storedData.length > 0 ? (
           <Form form={form} component={false}>
@@ -174,9 +190,9 @@ const DashboardTable = () => {
               rowClassName="editable-row"
               dataSource={data}
               scroll={{ x: 'max-content' }}
-            components={{
-              body: { cell: EditableCell },
-            }}
+              components={{
+                body: { cell: EditableCell },
+              }}
             />
           </Form>
         )
