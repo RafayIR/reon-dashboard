@@ -1,14 +1,11 @@
-import { useState, useEffect } from 'react';
-import type { TableProps } from 'antd';
-import { Form, Input, InputNumber, Popconfirm, Table, Space, Typography } from 'antd';
+import { useState, useEffect, lazy, Suspense } from 'react';
+import { Form, Input, InputNumber, Popconfirm, Table, Space, Typography, Spin, type TableProps } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { Spin } from "antd";
 import { updateSiteRequest } from '../../redux/actions/siteAction';
 import { type Site, type RootState, type EditableCellProps } from '../../utils/type';
 import ModalComponent from '../ui/Modal';
 import { showModal } from '../../redux/actions/modalAction';
-import SiteInsightChart from './SiteInsightChart';
-
+const SiteInsightChart = lazy(() => import('./SiteInsightChart'));
 
 const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
   editing,
@@ -42,7 +39,6 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
     </td>
   );
 };
-
 
 const DashboardTable = () => {
   const [form] = Form.useForm();
@@ -190,7 +186,9 @@ const DashboardTable = () => {
           )
       }
       <ModalComponent title="">
-        <SiteInsightChart insightData={selectedSite?.insights} siteName={selectedSite?.name} />
+        <Suspense fallback={<Spin />}>
+          <SiteInsightChart insightData={selectedSite?.insights} siteName={selectedSite?.name} />
+        </Suspense>
       </ModalComponent>
 
     </div>
