@@ -62,7 +62,7 @@ const DashboardPage = () => {
             </Popover>
           </div>
         </div>
-        <Suspense fallback={<Spin />}>
+        <Suspense fallback={<Spin fullscreen />}>
           {settings?.showSummaryCards && <SummaryCards />}
           {settings?.showDataTable && <DashboardTable />}
         </Suspense>

@@ -12,7 +12,7 @@ const InsightsPage = () => {
           </h1>
         </div>
         <div className="multisite-insight-wrapper mt-4">
-          <Suspense fallback={<Spin />}>
+          <Suspense fallback={<Spin fullscreen />}>
             <MultiSiteInsight />
           </Suspense>
         </div>

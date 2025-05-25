@@ -198,7 +198,7 @@ const DashboardTable = () => {
         )
           :
           (
-            <Spin />
+            <Spin fullscreen />
           )
       }
       <ModalComponent title="">
