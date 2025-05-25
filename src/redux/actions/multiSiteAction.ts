@@ -1,9 +1,5 @@
 import { SET_SITE_INSIGHTS, LOAD_SITE_INSIGHTS } from '../actionType';
-
-interface Site {
-  id: string;
-  name: string;
-}
+import { type Site } from '../../utils/type';
 
 export const loadSiteInsights = () => ({
   type: LOAD_SITE_INSIGHTS,

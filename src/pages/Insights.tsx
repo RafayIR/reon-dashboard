@@ -1,9 +1,10 @@
-import MultiSiteInsight from "../components/insights/MultiSIteInsights";
+import { lazy, Suspense } from "react";
+const MultiSiteInsight = lazy(() => import('../components/insights/MultiSIteInsights'));
+import { Spin } from "antd";
 
 const InsightsPage = () => {
-
   return (
-    <div className="insight-page-wrapper">
+    <div className="min-h-screen insight-page-wrapper">
       <div className="container">
         <div className="site-title">
           <h1>
@@ -11,7 +12,9 @@ const InsightsPage = () => {
           </h1>
         </div>
         <div className="multisite-insight-wrapper">
-          <MultiSiteInsight />
+          <Suspense fallback={<Spin />}>
+            <MultiSiteInsight />
+          </Suspense>
         </div>
       </div>
     </div>

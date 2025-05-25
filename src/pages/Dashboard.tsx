@@ -1,8 +1,8 @@
-import { useState } from "react";
-import SummaryCards from "../components/dashboard/SummaryCards";
-import DashboardTable from "../components/dashboard/DashboardTable";
+import { useState, lazy, Suspense } from "react";
+const DashboardTable = lazy(() => import('../components/dashboard/DashboardTable'));
+const SummaryCards = lazy(() => import('../components/dashboard/SummaryCards'));
 import { SettingOutlined } from '@ant-design/icons';
-import { Popover, Button, Checkbox } from "antd";
+import { Popover, Button, Checkbox, Spin } from "antd";
 import type { CheckboxChangeEvent } from 'antd';
 
 type SettingsKey = 'showSummaryCards' | 'showDataTable';
@@ -62,8 +62,10 @@ const DashboardPage = () => {
             </Popover>
           </div>
         </div>
-        {settings?.showSummaryCards && <SummaryCards />}
-        {settings?.showDataTable && <DashboardTable />}
+        <Suspense fallback={<Spin />}>
+          {settings?.showSummaryCards && <SummaryCards />}
+          {settings?.showDataTable && <DashboardTable />}
+        </Suspense>
       </div>
 
     </>

@@ -4,7 +4,6 @@ import rootReducer from './reducers';
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from './sagas';
 
-
 const preloadState = loadState();
 
 const sagaMiddleware = createSagaMiddleware();

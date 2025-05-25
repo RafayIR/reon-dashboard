@@ -190,7 +190,6 @@ const DashboardTable = () => {
           <SiteInsightChart insightData={selectedSite?.insights} siteName={selectedSite?.name} />
         </Suspense>
       </ModalComponent>
-
     </div>
   )
 }

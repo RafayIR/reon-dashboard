@@ -5,11 +5,7 @@ import {
   UPDATE_SITE_REQUEST,
   SITES_FAILURE
 } from "../actionType";
-
-interface Site {
-  id: string;
-  name: string;
-}
+import { type Site } from "../../utils/type";
 
 // Action Creators
 export const fetchSites = () => ({ type: FETCH_SITES });

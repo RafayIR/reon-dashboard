@@ -5,12 +5,7 @@ import {
   UPDATE_SITE_REQUEST,
   UPDATE_SITE
 } from '../actionType';
-
-interface Site {
-  id: string;
-  name: string;
-  [key: string]: any;
-}
+import { type Site } from '../../utils/type';
 
 interface SiteState {
   data: Site[];

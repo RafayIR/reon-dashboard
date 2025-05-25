@@ -1,5 +1,4 @@
 import { put, takeEvery, call } from 'redux-saga/effects';
-
 // import instance from '../../services/axios/axios';
 
 import {
@@ -10,12 +9,7 @@ import {
   UPDATE_SITE,
   UPDATE_SITE_REQUEST
 } from '../actionType';
-
-interface Site {
-  id: string;
-  name: string;
-  [key: string]: any;
-}
+import { type Site } from '../../utils/type';
 
 const siteService = {
   loadSites: () => {

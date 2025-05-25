@@ -1,10 +1,5 @@
 import { SET_SITE_INSIGHTS } from '../actionType';
-
-interface Site {
-  id: string;
-  name: string;
-  [key: string]: any;
-}
+import { type Site } from '../../utils/type';
 
 interface siteInsightAction {
   type: typeof SET_SITE_INSIGHTS;

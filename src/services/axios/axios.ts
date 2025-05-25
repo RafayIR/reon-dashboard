@@ -5,7 +5,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   (config) => {
-    // Example: attach token from localStorage
+    // attach token from localStorage
     const token = localStorage.getItem('authToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -15,7 +15,6 @@ instance.interceptors.request.use(
     return config;
   },
   (error) => {
-    // Handle request error
     return Promise.reject(error);
   }
 );
