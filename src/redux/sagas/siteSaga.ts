@@ -21,6 +21,7 @@ const siteService = {
   },
 
   updateSites: (siteData: Site): Promise<{ data: Site }> => {
+    // Assuming POST API CALL FOR EDIT
     return new Promise((resolve) => {
       setTimeout(() => {
         const sites = JSON.parse(localStorage.getItem('sites') || '[]');

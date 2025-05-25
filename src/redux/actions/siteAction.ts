@@ -9,7 +9,6 @@ import {
 interface Site {
   id: string;
   name: string;
-  // Add other site fields as needed
 }
 
 // Action Creators
