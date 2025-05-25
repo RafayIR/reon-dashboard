@@ -1,26 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { TableProps } from 'antd';
 import { Form, Input, InputNumber, Popconfirm, Table, Space, Typography } from 'antd';
+import { useSelector, useDispatch } from 'react-redux';
+import { Spin } from "antd";
+import { updateSiteRequest } from '../../redux/actions/siteAction';
+import { type Site, type RootState, type EditableCellProps } from '../../utils/type';
+import ModalComponent from '../ui/Modal';
+import { showModal } from '../../redux/actions/modalAction';
+import SiteInsightChart from './SiteInsightChart';
 
-interface DataType {
-  id: number;
-  name: string;
-  status: string;
-  lastUpdated: string;
-  alarms: number;
-  tickets: number;
-  devices: number;
-  insights: number[]; // Keep it because it's in the data
-}
-
-interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-  editing: boolean;
-  dataIndex: string;
-  title: any;
-  inputType: 'number' | 'text';
-  record: DataType;
-  index: number;
-}
 
 const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
   editing,
@@ -56,17 +44,21 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
 };
 
 
-const rawData = localStorage?.getItem('sites');
-const storedData: DataType[] | undefined = rawData ? JSON.parse(rawData) : undefined;
-
 const DashboardTable = () => {
   const [form] = Form.useForm();
-  const [data, setData] = useState<DataType[] | undefined>(storedData);
+  const storedData = useSelector((state: RootState) => state.sites?.data);
+  const loading = useSelector((state: RootState) => state.sites?.loading);
+  const [selectedSite, setSelectedSite] = useState<null | typeof storedData[0]>(null);
+  const dispatch = useDispatch()
+  const [data, setData] = useState<Site[] | undefined>(storedData);
   const [editingKey, setEditingKey] = useState('');
 
-  const isEditing = (record: DataType) => record.id === Number(editingKey);
+  useEffect(() => {
+    setData(storedData);
+  }, [storedData]);
 
-  const edit = (record: Partial<DataType>) => {
+  const isEditing = (record: Site) => record.id === Number(editingKey);
+  const edit = (record: Partial<Site>) => {
     form.setFieldsValue({ ...record });
     setEditingKey(String(record.id));
   };
@@ -77,23 +69,11 @@ const DashboardTable = () => {
 
   const save = async (id: number) => {
     try {
-      const row = (await form.validateFields()) as DataType;
-      const newData = [...(data ?? [])];
-      const index = newData.findIndex((item) => item.id === id);
-
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, { ...item, ...row, id }); // ← Ensure ID is kept
-        setData(newData);
-        localStorage.setItem('sites', JSON.stringify(newData));
-        setEditingKey('');
-      } else {
-        newData.push({ ...row, id }); // ← Add the ID here
-        setData(newData);
-        setEditingKey('');
-      }
+      const values = await form.validateFields();
+      dispatch(updateSiteRequest({ ...values, id }));
+      setEditingKey('');
     } catch (errInfo) {
-      console.log('Validate Failed:', errInfo);
+      console.error('Validation failed:', errInfo);
     }
   };
 
@@ -144,7 +124,7 @@ const DashboardTable = () => {
       title: 'Action',
       key: 'action',
       width: 250,
-      render: (_: any, record: DataType) => {
+      render: (_: any, record: Site) => {
         const editable = isEditing(record);
         return (
           <Space size="middle">
@@ -162,7 +142,9 @@ const DashboardTable = () => {
                 Edit
               </Typography.Link>
             )}
-            <a href="#">View Insights</a>
+            <Typography.Link onClick={() => { setSelectedSite(record), dispatch(showModal()) }}>
+              View Insights
+            </Typography.Link>
           </Space>
         )
 
@@ -170,13 +152,13 @@ const DashboardTable = () => {
     }
   ];
 
-  const mergedColumns: TableProps<DataType>['columns'] = columns?.map((col) => {
+  const mergedColumns: TableProps<Site>['columns'] = columns?.map((col) => {
     if (!(col as any).editable) {
       return col;
     }
     return {
       ...col,
-      onCell: (record: DataType) => ({
+      onCell: (record: Site) => ({
         record,
         inputType: (col.dataIndex === 'name' ? 'status' : 'text') as 'number' | 'text',
         dataIndex: col.dataIndex,
@@ -188,16 +170,29 @@ const DashboardTable = () => {
 
   return (
     <div className='table-wrapper mt-16 shadow-md'>
-      <Form form={form} component={false}>
-        <Table<DataType>
-          columns={mergedColumns}
-          rowClassName="editable-row"
-          dataSource={data}
-          components={{
-            body: { cell: EditableCell },
-          }}
-        />
-      </Form>
+      {
+        storedData && storedData.length > 0 ? (
+          <Form form={form} component={false}>
+            <Table
+              loading={loading}
+              columns={mergedColumns}
+              rowClassName="editable-row"
+              dataSource={data}
+              components={{
+                body: { cell: EditableCell },
+              }}
+            />
+          </Form>
+        )
+          :
+          (
+            <Spin />
+          )
+      }
+      <ModalComponent title="">
+        <SiteInsightChart insightData={selectedSite?.insights} siteName={selectedSite?.name} />
+      </ModalComponent>
+
     </div>
   )
 }

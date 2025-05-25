@@ -4,6 +4,9 @@ import { ConfigProvider } from 'antd';
 import sitesData from './data/sites.json';
 import insightsData from './data/multiSiteInsights.json';
 import uiSettings from './data/uiSettings.json';
+import { initializeData } from './utils/loadState';
+import { useDispatch } from 'react-redux';
+import { fetchSites } from './redux/actions/siteAction';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router'
 import DashboardPage from './pages/Dashboard';
 import InsightsPage from './pages/Insights';
@@ -12,17 +15,14 @@ import MainLayout from './layout/MainLayout';
 
 
 function App() {
+  const dispatch = useDispatch();
   useEffect(() => {
-    if (!localStorage.getItem('sites')) {
-      localStorage.setItem('sites', JSON.stringify(sitesData));
-    }
-    if (!localStorage.getItem('multiSiteInsights')) {
-      localStorage.setItem('multiSiteInsights', JSON.stringify(insightsData));
-    }
-    if (!localStorage.getItem('uiSettings')) {
-      localStorage.setItem('uiSettings', JSON.stringify(uiSettings));
-    }
-
+    initializeData({
+      sites: sitesData,
+      multiSiteInsights: insightsData,
+      uiSettings: uiSettings
+    });
+    dispatch(fetchSites())
   }, [])
 
   return (

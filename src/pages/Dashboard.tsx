@@ -7,7 +7,10 @@ import type { CheckboxChangeEvent } from 'antd';
 
 type SettingsKey = 'showSummaryCards' | 'showDataTable';
 const LOCAL_STORAGE_KEY = 'uiSettings'
-const defaultSettings = localStorage.getItem('uiSettings')
+const defaultSettings = {
+  showSummaryCards: true,
+  showDataTable: true,
+}
 
 const DashboardPage = () => {
   const [settings, setSettings] = useState(() => {
@@ -27,13 +30,13 @@ const DashboardPage = () => {
   const popOverContent = (
     <div className="flex flex-col gap-3">
       <Checkbox
-        checked={settings.showSummaryCards}
+        checked={settings?.showSummaryCards}
         onChange={updateSetting('showSummaryCards')}
       >
-        Show Summary Cards
+        Show/Hide Summary Cards
       </Checkbox>
       <Checkbox
-        checked={settings.showDataTable}
+        checked={settings?.showDataTable}
         onChange={updateSetting('showDataTable')}
       >
         Show/Hide Data Table
@@ -59,8 +62,8 @@ const DashboardPage = () => {
             </Popover>
           </div>
         </div>
-        {settings.showSummaryCards && <SummaryCards />}
-        {settings.showDataTable && <DashboardTable />}
+        {settings?.showSummaryCards && <SummaryCards />}
+        {settings?.showDataTable && <DashboardTable />}
       </div>
 
     </>
