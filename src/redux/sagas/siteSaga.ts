@@ -1,4 +1,7 @@
 import { put, takeEvery, call } from 'redux-saga/effects';
+
+// import instance from '../../services/axios/axios';
+
 import {
   FETCH_SITES,
   SITE_REQUEST,
@@ -20,7 +23,12 @@ const siteService = {
     return Promise.resolve({ data: sites });
   },
 
-  updateSites: (siteData: Site): Promise<{ data: Site }> => {
+  updateSites: async (siteData: Site): Promise<{ data: Site }> => {
+
+    // Mock POST API CALL TO SERVER
+    // const response = await instance.post(`/sites/${siteData.id}`, siteData);
+    // return {data : response.data}
+
     // Assuming POST API CALL FOR EDIT
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -30,7 +38,7 @@ const siteService = {
         );
         localStorage.setItem('sites', JSON.stringify(updatedSites));
         resolve({ data: updatedSites.find((s: Site) => s.id === siteData.id) });
-      }, 2000)
+      }, 1500)
     });
   }
 };

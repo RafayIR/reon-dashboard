@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import ReactECharts from 'echarts-for-react';
 import { loadSiteInsights } from '../../redux/actions/multiSiteAction';
 
-// Type for a single site insight
 interface SiteInsight {
   siteId: number;
   siteName: string;
