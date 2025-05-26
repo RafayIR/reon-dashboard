@@ -39,7 +39,7 @@ const DashboardPage = () => {
         checked={settings?.showDataTable}
         onChange={updateSetting('showDataTable')}
       >
-        Show/Hide Data Table
+        Show/Hide Table
       </Checkbox>
     </div>
   );
